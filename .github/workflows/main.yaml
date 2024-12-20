@@ -4,7 +4,7 @@ on: push
 
 jobs:
   build:
-   runs-on: ubuntu-lastest
+   runs-on: ubuntu-latest
    steps:
       - name: empaquetado
         run: echo "empaquetado"
