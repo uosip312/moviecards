@@ -9,15 +9,10 @@ import java.util.List;
 
 import static com.lauracercas.moviecards.util.Constants.URL_BASE;
 
-/**
- * Autor: Laura Cercas Ramos
- * Proyecto: TFM Integración Continua con GitHub Actions
- * Fecha: 04/06/2024
- */
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    private final String url = URL_BASE + "/movies";
+    private static final String url = URL_BASE + "/movies";
 
     private final RestTemplate restTemplate;
 

@@ -21,7 +21,7 @@ class MovieServiceImplTest {
     private RestTemplate restTemplate;
     private MovieServiceImpl sut;
     private AutoCloseable closeable;
-    private final String URL = URL_BASE + "/movies";
+    private static final String URL = URL_BASE + "/movies";
 
     @BeforeEach
     public void setUp() {
@@ -48,12 +48,12 @@ class MovieServiceImplTest {
     }
 
     @Test
-    public void shouldGetMovieById() {
+    void shouldGetMovieById() {
         Movie movie = new Movie();
         movie.setId(1);
         movie.setTitle("Sample Movie");
 
-        when(restTemplate.getForObject(eq(URL + "/" + 1), eq(Movie.class))).thenReturn(movie);
+        when(restTemplate.getForObject(URL + "/" + 1, Movie.class)).thenReturn(movie);
 
         Movie result = sut.getMovieById(1);
 

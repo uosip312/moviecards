@@ -22,7 +22,7 @@ class ActorServiceImplTest {
     private RestTemplate restTemplate;
     private ActorServiceImpl sut;
     private AutoCloseable closeable;
-    private final String URL = URL_BASE + "/actors";
+    private static final String URL = URL_BASE + "/actors";
 
     @BeforeEach
     void setUp() {
@@ -50,12 +50,12 @@ class ActorServiceImplTest {
     }
 
     @Test
-    public void shouldGetActorById() {
+    void shouldGetActorById() {
         Actor actor = new Actor();
         actor.setId(1);
         actor.setName("Sample Actor");
 
-        when(restTemplate.getForObject(eq(URL + "/" + 1), eq(Actor.class))).thenReturn(actor);
+        when(restTemplate.getForObject(URL + "/" + 1, Actor.class)).thenReturn(actor);
 
         Actor result = sut.getActorById(1);
 
