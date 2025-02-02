@@ -12,7 +12,7 @@ import static com.lauracercas.moviecards.util.Constants.URL_BASE;
 @Service
 public class ActorServiceImpl implements ActorService {
 
-    private static final String url = URL_BASE + "/actors";
+    private static final String URL = URL_BASE + "/actors";
 
     private final RestTemplate restTemplate;
 
@@ -22,7 +22,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public List<Actor> getAllActors() {
-        Actor[] actors = restTemplate.getForObject(url, Actor[].class);
+        Actor[] actors = restTemplate.getForObject(URL, Actor[].class);
         assert actors != null;
         return List.of(actors);
     }
@@ -30,15 +30,15 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public Actor save(Actor actor) {
         if (actor.getId() == null) {
-            restTemplate.postForObject(url, actor, Actor.class);
+            restTemplate.postForObject(URL, actor, Actor.class);
         } else {
-            restTemplate.put(url, actor);
+            restTemplate.put(URL, actor);
         }
         return actor;
     }
 
     @Override
     public Actor getActorById(Integer actorId) {
-        return restTemplate.getForObject(url + "/" + actorId, Actor.class);
+        return restTemplate.getForObject(URL + "/" + actorId, Actor.class);
     }
 }

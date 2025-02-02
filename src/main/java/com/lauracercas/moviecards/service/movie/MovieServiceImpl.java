@@ -12,7 +12,7 @@ import static com.lauracercas.moviecards.util.Constants.URL_BASE;
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    private static final String url = URL_BASE + "/movies";
+    private static final String URL = URL_BASE + "/movies";
 
     private final RestTemplate restTemplate;
 
@@ -22,7 +22,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> getAllMovies() {
-        Movie[] movies = restTemplate.getForObject(url, Movie[].class);
+        Movie[] movies = restTemplate.getForObject(URL, Movie[].class);
         assert movies != null;
         return List.of(movies);
     }
@@ -30,15 +30,15 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie save(Movie movie) {
         if (movie.getId() == null) {
-            restTemplate.postForObject(url, movie, Movie.class);
+            restTemplate.postForObject(URL, movie, Movie.class);
         } else {
-            restTemplate.put(url, movie);
+            restTemplate.put(URL, movie);
         }
         return movie;
     }
 
     @Override
     public Movie getMovieById(Integer movieId) {
-        return restTemplate.getForObject(url + "/" + movieId, Movie.class);
+        return restTemplate.getForObject(URL + "/" + movieId, Movie.class);
     }
 }
