@@ -1,5 +1,6 @@
 package com.lauracercas.moviecards.unittest.service;
 
+import com.lauracercas.moviecards.model.Actor;
 import com.lauracercas.moviecards.model.Movie;
 import com.lauracercas.moviecards.repositories.MovieJPA;
 import com.lauracercas.moviecards.service.movie.MovieServiceImpl;
@@ -7,10 +8,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.lauracercas.moviecards.util.Constants.URL_BASE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
@@ -23,14 +26,15 @@ import static org.mockito.MockitoAnnotations.openMocks;
  */
 class MovieServiceImplTest {
     @Mock
-    private MovieJPA movieJPA;
+    private RestTemplate restTemplate;
     private MovieServiceImpl sut;
     private AutoCloseable closeable;
+    private final String URL = URL_BASE + "/movies";
 
     @BeforeEach
     public void setUp() {
         closeable = openMocks(this);
-        sut = new MovieServiceImpl(movieJPA);
+        sut = new MovieServiceImpl(restTemplate);
     }
 
     @AfterEach
@@ -40,11 +44,11 @@ class MovieServiceImplTest {
 
     @Test
     public void shouldGetAllMovies() {
-        List<Movie> movies = new ArrayList<>();
-        movies.add(new Movie());
-        movies.add(new Movie());
+        Movie movies1 = new Movie();
+        Movie movies2 = new Movie();
+        Movie[] movies = {movies1, movies2};
 
-        when(movieJPA.findAll()).thenReturn(movies);
+        when(restTemplate.getForObject(URL, Movie[].class)).thenReturn(movies);
 
         List<Movie> result = sut.getAllMovies();
 
@@ -57,7 +61,7 @@ class MovieServiceImplTest {
         movie.setId(1);
         movie.setTitle("Sample Movie");
 
-        when(movieJPA.getById(anyInt())).thenReturn(movie);
+        when(restTemplate.getForObject(URL + "/" + anyInt(), Movie.class)).thenReturn(movie);
 
         Movie result = sut.getMovieById(1);
 
@@ -70,7 +74,7 @@ class MovieServiceImplTest {
         Movie movie = new Movie();
         movie.setTitle("New Movie");
 
-        when(movieJPA.save(movie)).thenReturn(movie);
+        when(restTemplate.postForObject(URL, movie, Movie.class)).thenReturn(movie);
 
         Movie result = sut.save(movie);
 
