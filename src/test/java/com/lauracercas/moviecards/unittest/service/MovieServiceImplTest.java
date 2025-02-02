@@ -1,8 +1,6 @@
 package com.lauracercas.moviecards.unittest.service;
 
-import com.lauracercas.moviecards.model.Actor;
 import com.lauracercas.moviecards.model.Movie;
-import com.lauracercas.moviecards.repositories.MovieJPA;
 import com.lauracercas.moviecards.service.movie.MovieServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,20 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.lauracercas.moviecards.util.Constants.URL_BASE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-/**
- * Autor: Laura Cercas Ramos
- * Proyecto: TFM Integración Continua con GitHub Actions
- * Fecha: 04/06/2024
- */
 class MovieServiceImplTest {
     @Mock
     private RestTemplate restTemplate;
@@ -61,7 +53,7 @@ class MovieServiceImplTest {
         movie.setId(1);
         movie.setTitle("Sample Movie");
 
-        when(restTemplate.getForObject(URL + "/" + anyInt(), Movie.class)).thenReturn(movie);
+        when(restTemplate.getForObject(eq(URL + "/" + 1), eq(Movie.class))).thenReturn(movie);
 
         Movie result = sut.getMovieById(1);
 

@@ -12,15 +12,10 @@ import java.util.List;
 
 import static com.lauracercas.moviecards.util.Constants.URL_BASE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-/**
- * Autor: Laura Cercas Ramos
- * Proyecto: TFM Integración Continua con GitHub Actions
- * Fecha: 04/06/2024
- */
 class ActorServiceImplTest {
 
     @Mock
@@ -60,7 +55,7 @@ class ActorServiceImplTest {
         actor.setId(1);
         actor.setName("Sample Actor");
 
-        when(restTemplate.getForObject(URL + "/" + anyInt(), Actor.class)).thenReturn(actor);
+        when(restTemplate.getForObject(eq(URL + "/" + 1), eq(Actor.class))).thenReturn(actor);
 
         Actor result = sut.getActorById(1);
 
