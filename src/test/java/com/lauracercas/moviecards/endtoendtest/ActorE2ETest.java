@@ -14,11 +14,6 @@ import static com.lauracercas.moviecards.util.Messages.NEW_ACTOR_TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Autor: Laura Cercas Ramos
- * Proyecto: TFM Integración Continua con GitHub Actions
- * Fecha: 04/06/2024
- */
 public class ActorE2ETest {
 
     private WebDriver driver;
@@ -48,6 +43,7 @@ public class ActorE2ETest {
         assertTrue(driver.findElement(By.id("name")).isDisplayed());
         assertTrue(driver.findElement(By.id("birthDate")).isDisplayed());
         assertTrue(driver.findElement(By.id("country")).isDisplayed());
+        assertTrue(driver.findElement(By.id("deadDate")).isDisplayed());
 
     }
 
@@ -74,8 +70,26 @@ public class ActorE2ETest {
         assertEquals("Nombre", headerRow.findElements(By.tagName("th")).get(1).getText());
         assertEquals("Fecha Nacimiento", headerRow.findElements(By.tagName("th")).get(2).getText());
         assertEquals("Pais", headerRow.findElements(By.tagName("th")).get(3).getText());
-        assertEquals("Editar", headerRow.findElements(By.tagName("th")).get(4).getText());
+        assertEquals("Fecha Fallecimiento", headerRow.findElements(By.tagName("th")).get(4).getText());
+        assertEquals("Editar", headerRow.findElements(By.tagName("th")).get(5).getText());
 
+    }
+
+    @Test
+    public void testCreateNewActor() {
+        driver.get("http://localhost:8089/actors/new");
+
+        // Completar el formulario
+        driver.findElement(By.id("name")).sendKeys("Test Actor");
+        driver.findElement(By.id("birthDate")).sendKeys("1990-01-01");
+        driver.findElement(By.id("deadDate")).sendKeys("2020-01-01");
+        driver.findElement(By.id("country")).sendKeys("USA");
+
+        driver.findElement(By.tagName("button")).click();
+
+        WebElement successMessage = driver.findElement(By.className("alert-success"));
+        assertTrue(successMessage.isDisplayed());
+        assertTrue(successMessage.getText().contains("Actor guardado correctamente"));
     }
 
 }
