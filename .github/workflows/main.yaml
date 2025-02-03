@@ -83,6 +83,9 @@ jobs:
         run: |
           mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.qualitygate.wait=true -Dsonar.login=admin -Dsonar.password=admin
 
+      - name: Instalar jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Obtener resultados de SonarQube
         id: sonar-result
         run: |
@@ -103,11 +106,11 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: moviecards-pre-java
+          name: moviecards-java
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+      - id: deploy-to-webapp
+      - uses: azure/webapps-deploy@v3
         with:
           app-name: 'moviecards-pre-edelacode'
           slot-name: 'Production'
