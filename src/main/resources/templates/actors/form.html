@@ -1,8 +1,3 @@
-<!--
-    Autor: Laura Cercas Ramos
-    Proyecto: TFM Integración Continua con GitHub Actions
-    Fecha: 04/06/2024
--->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
@@ -72,6 +67,17 @@
                     name="country"
                     placeholder="Escriba el país del actor"
                     required="required"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="deadDate" class="form-label">Fecha Fallecimiento</label>
+            <input
+                    type="date"
+                    class="form-control"
+                    th:field="*{deadDate}"
+                    id="deadDate"
+                    name="deadDate"
+                    placeholder="Escriba la fecha de fallecimiento"
             />
         </div>
         <button type="submit" class="btn btn-dark mb-3">Guardar</button>
