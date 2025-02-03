@@ -117,12 +117,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: qa
-    if: github.ref=='refs/heads/main' && env.critical_issues <= 5
+    if: needs.qa.result == 'success' && github.ref=='refs/heads/main'
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
       
     steps:
+      - name: Validar fallos críticos antes del despliegue
+        id: validate-critical-issues
+        run: |
+          if [ "$critical_issues" -gt 5 ]; then
+            echo "El número de fallos críticos ($critical_issues) supera el límite permitido. Despliegue cancelado."
+            exit 1
+          else
+            echo "Número de fallos críticos aceptable ($critical_issues). Continuando con el despliegue."
+          fi
+        env:
+          critical_issues: ${{ env.critical_issues }}
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
