@@ -83,10 +83,41 @@ jobs:
         run: |
           mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.qualitygate.wait=true -Dsonar.login=admin -Dsonar.password=admin
 
+      - name: Obtener resultados de SonarQube
+        id: sonar-result
+        run: |
+          # Realizar la consulta a la API de SonarQube para fallos críticos del proyecto "moviecards"
+          critical_issues=$(curl -s "http://localhost:9000/api/issues/search?projectKeys=moviecards&severities=CRITICAL&resolved=false" | jq '.total')
+          echo "Número de fallos críticos: $critical_issues"
+          echo "critical_issues=$critical_issues" >> $GITHUB_ENV
+
+  stage:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref=='refs/heads/main'
+    environment:
+      name: 'Pre-Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: moviecards-pre-java
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'moviecards-pre-edelacode'
+          slot-name: 'Production'
+          package: '*.jar'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F8CEE65FA63045FA8570BB90802B029A }}
+
   deploy:
     runs-on: ubuntu-latest
     needs: qa
-    if: github.ref=='refs/heads/main'
+    if: github.ref=='refs/heads/main' && env.critical_issues <= 5
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
