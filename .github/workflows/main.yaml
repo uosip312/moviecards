@@ -109,8 +109,8 @@ jobs:
           name: moviecards-java
 
       - name: Deploy to Azure Web App
-      - id: deploy-to-webapp
-      - uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'moviecards-pre-edelacode'
           slot-name: 'Production'
