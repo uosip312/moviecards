@@ -11,11 +11,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Autor: Laura Cercas Ramos
- * Proyecto: TFM Integración Continua con GitHub Actions
- * Fecha: 04/06/2024
- */
 @DataJpaTest
 public class ActorJPAIT {
 
@@ -28,6 +23,7 @@ public class ActorJPAIT {
         actor.setName("actor");
         actor.setBirthDate(new Date());
         actor.setCountry("spain");
+        actor.setDeadDate(new Date());
 
         Actor savedActor = actorJPA.save(actor);
 
@@ -37,6 +33,7 @@ public class ActorJPAIT {
 
         assertTrue(foundActor.isPresent());
         assertEquals(savedActor, foundActor.get());
+        assertNotNull(foundActor.get().getDeadDate());
     }
 
     @Test
@@ -44,11 +41,13 @@ public class ActorJPAIT {
         Actor actor = new Actor();
         actor.setName("actor");
         actor.setBirthDate(new Date());
+        actor.setDeadDate(new Date());
         Actor savedActor = actorJPA.save(actor);
 
         Optional<Actor> foundActor = actorJPA.findById(savedActor.getId());
 
         assertTrue(foundActor.isPresent());
         assertEquals(savedActor, foundActor.get());
+        assertNotNull(foundActor.get().getDeadDate());
     }
 }

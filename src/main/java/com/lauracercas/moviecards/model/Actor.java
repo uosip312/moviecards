@@ -7,11 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Autor: Laura Cercas Ramos
- * Proyecto: TFM Integración Continua con GitHub Actions
- * Fecha: 04/06/2024
- */
 @Entity
 public class Actor {
     @Id
@@ -24,6 +19,9 @@ public class Actor {
     private Date birthDate;
 
     private String country;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date deadDate;
 
     @ManyToMany(mappedBy = "actors")
     private List<Movie> movies;
@@ -68,6 +66,14 @@ public class Actor {
         this.country = country;
     }
 
+    public Date getDeadDate() {
+        return deadDate;
+    }
+
+    public void setDeadDate(Date deadDate) {
+        this.deadDate = deadDate;
+    }
+
     public List<Movie> getMovies() {
         return movies;
     }
@@ -78,14 +84,19 @@ public class Actor {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Actor actor = (Actor) o;
-        return Objects.equals(id, actor.id) && Objects.equals(name, actor.name) && Objects.equals(birthDate, actor.birthDate) && Objects.equals(country, actor.country);
+        return Objects.equals(id, actor.id) && Objects.equals(name, actor.name)
+                && Objects.equals(birthDate, actor.birthDate)
+                && Objects.equals(country, actor.country)
+                && Objects.equals(deadDate, actor.deadDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, birthDate, country);
+        return Objects.hash(id, name, birthDate, country, deadDate);
     }
 }
