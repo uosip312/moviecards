@@ -1,10 +1,5 @@
 package com.lauracercas.moviecards.util;
 
-/**
- * Autor: Laura Cercas Ramos
- * Proyecto: TFM Integración Continua con GitHub Actions
- * Fecha: 04/06/2024
- */
 public class Messages {
     public static final String CARD_REGISTRATION_SUCCESS = "Se ha registrado el actor en la película. Ficha creada correctamente";
     public static final String CARD_ALREADY_EXISTS = "Ya se ha inscrito este actor en esta película";
@@ -18,5 +13,7 @@ public class Messages {
     public static final String EDIT_MOVIE_TITLE = "Editar Película";
     public static final String NEW_MOVIE_TITLE = "Nueva Película";
 
-
+    private Messages() {
+        throw new UnsupportedOperationException();
+    }
 }
