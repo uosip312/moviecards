@@ -88,7 +88,10 @@ jobs:
           # Realizar la consulta a la API de SonarQube para fallos críticos del proyecto "moviecards"
           critical_issues=$(curl -u admin:admin -s "http://localhost:9000/api/issues/search?projectKeys=com.lauracercas:moviecards&severities=CRITICAL&resolved=false" | jq '.total')
           echo "Número de fallos críticos: $critical_issues"
-          echo "critical_issues=$critical_issues" >> $GITHUB_ENV
+          echo "critical_issues=$critical_issues" >> $GITHUB_OUTPUT  # Usar GITHUB_OUTPUT para definir un output
+
+      outputs:
+        critical_issues: ${{ steps.sonar-result.outputs.critical_issues }}
 
   stage:
     runs-on: ubuntu-latest
@@ -125,14 +128,18 @@ jobs:
       - name: Validar fallos críticos antes del despliegue
         id: validate-critical-issues
         run: |
-          if [ "$critical_issues" -gt 5 ]; then
-            echo "El número de fallos críticos ($critical_issues) supera el límite permitido. Despliegue cancelado."
+          if ! [[ "$CRITICAL_ISSUES" =~ ^[0-9]+$ ]]; then
+            echo "Error: No se pudo obtener el número de fallos críticos."
+            exit 1
+          fi
+          if [ "$CRITICAL_ISSUES" -gt 5 ]; then
+            echo "El número de fallos críticos ($CRITICAL_ISSUES) supera el límite permitido. Despliegue cancelado."
             exit 1
           else
-            echo "Número de fallos críticos aceptable ($critical_issues). Continuando con el despliegue."
+            echo "Número de fallos críticos aceptable ($CRITICAL_ISSUES). Continuando con el despliegue."
           fi
         env:
-          critical_issues: ${{ env.critical_issues }}
+          CRITICAL_ISSUES: ${{ needs.qa.outputs.critical_issues }}
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
