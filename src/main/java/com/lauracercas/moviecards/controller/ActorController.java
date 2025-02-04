@@ -17,6 +17,11 @@ import java.util.List;
 @Controller
 public class ActorController {
 
+    private static final String ACTOR_ATTRIBUTE = "actor";
+    private static final String TITLE_ATTRIBUTE = "title";
+    private static final String ACTORS_FORM_VIEW = "actors/form";
+    private static final String ACTORS_LIST_VIEW = "actors/list";
+
     private final ActorService actorService;
 
     public ActorController(ActorService actorService) {
@@ -26,20 +31,20 @@ public class ActorController {
     @GetMapping("actors")
     public String getActorsList(Model model) {
         model.addAttribute("actors", actorService.getAllActors());
-        return "actors/list";
+        return ACTORS_LIST_VIEW;
     }
 
     @GetMapping("actors/new")
     public String newActor(Model model) {
-        model.addAttribute("actor", new Actor());
-        model.addAttribute("title", Messages.NEW_ACTOR_TITLE);
-        return "actors/form";
+        model.addAttribute(ACTOR_ATTRIBUTE, new Actor());
+        model.addAttribute(TITLE_ATTRIBUTE, Messages.NEW_ACTOR_TITLE);
+        return ACTORS_FORM_VIEW;
     }
 
     @PostMapping("saveActor")
     public String saveActor(@ModelAttribute Actor actor, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "actors/form";
+            return ACTORS_FORM_VIEW;
         }
         Actor actorSaved = actorService.save(actor);
         if (actor.getId() != null) {
@@ -48,22 +53,21 @@ public class ActorController {
             model.addAttribute("message", Messages.SAVED_ACTOR_SUCCESS);
         }
 
-        model.addAttribute("actor", actorSaved);
-        model.addAttribute("title", Messages.EDIT_ACTOR_TITLE);
-        return "actors/form";
+        model.addAttribute(ACTOR_ATTRIBUTE, actorSaved);
+        model.addAttribute(TITLE_ATTRIBUTE, Messages.EDIT_ACTOR_TITLE);
+        return ACTORS_FORM_VIEW;
     }
 
     @GetMapping("editActor/{actorId}")
     public String editActor(@PathVariable Integer actorId, Model model) {
         Actor actor = actorService.getActorById(actorId);
         List<Movie> movies = actor.getMovies();
-        model.addAttribute("actor", actor);
+        model.addAttribute(ACTOR_ATTRIBUTE, actor);
         model.addAttribute("movies", movies);
 
-        model.addAttribute("title", Messages.EDIT_ACTOR_TITLE);
+        model.addAttribute(TITLE_ATTRIBUTE, Messages.EDIT_ACTOR_TITLE);
 
-        return "actors/form";
+        return ACTORS_FORM_VIEW;
     }
-
 
 }
