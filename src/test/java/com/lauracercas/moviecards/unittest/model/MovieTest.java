@@ -1,7 +1,5 @@
 package com.lauracercas.moviecards.unittest.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import com.lauracercas.moviecards.model.Actor;
 import com.lauracercas.moviecards.model.Movie;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MovieTest {
 
@@ -83,7 +83,8 @@ public class MovieTest {
         movie.setActors(actorsExample);
         Actor actorExample = new Actor(1,"Sample name");
         movie.addActor(actorExample);
-        assert(movie.getActors().contains(actorExample));
+        assertTrue(movie.getActors().contains(actorExample), "El actor debería estar en la lista de actores");
+        assertEquals(1, movie.getActors().size(), "El tamaño de la lista de actores debería ser 1");
     }
 
     @Test
@@ -92,7 +93,8 @@ public class MovieTest {
         Actor actorExample = new Actor(2,"Sample name");
         actorsExample.add(actorExample);
         movie.setActors(actorsExample);
-        assert(movie.existActorInMovie(actorExample));
+        assertTrue(movie.existActorInMovie(actorExample), "El actor debería existir en la película");
+        assertFalse(movie.getActors().isEmpty(), "La lista de actores no debería estar vacía");
     }
 
 }
